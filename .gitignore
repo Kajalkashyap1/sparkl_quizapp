@@ -1,0 +1,62 @@
+# --- Python & Django ---
+# Byte-compiled / cached files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+*.venv
+
+# Django settings and secrets
+*.env
+/config.json
+/secrets.json
+
+# Database (PostgreSQL credentials should be in .env)
+*.sqlite3
+db.sqlite3
+
+# Logs and Cache
+logs/
+*.log
+media/
+static/
+tmp/
+.DS_Store
+
+# Migrations
+**/migrations/**
+
+# --- Node.js & React ---
+# Dependencies
+node_modules/
+
+# Logs and debugging files
+npm-debug.log
+yarn-error.log
+
+# Build output
+build/
+dist/
+*.cache
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# IDE and OS-specific files
+.vscode/
+.idea/
+.DS_Store
+
+# --- Miscellaneous ---
+# Ignore generated lock files
+yarn.lock
+# Keep package-lock.json (since you're using npm)
+# If you use Yarn, uncomment the following line and remove package-lock.json:
+# package-lock.json
+
