@@ -44,12 +44,17 @@ function CreateQuiz() {
 
     try {
 
+      console.log("Sending Headers:", {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    });
+
       const response = await fetch("http://localhost:8000/api/quizzes/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-           Authorization: `Bearer ${token}`,
-        },
+          "Authorization": `Bearer ${token}`  
+      },
         body: JSON.stringify(quizData),
       });
 

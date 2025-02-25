@@ -19,8 +19,8 @@ This project is a Django-based REST API for creating and managing quizzes. It us
 ### Backend Setup
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-repo/quiz-api.git
-   cd quiz-api
+   git clone https://github.com/Kajalkashyap1/sparkl_quizapp.git
+   cd sparkl_quizapp
    ```
 2. **Create a virtual environment**
    ```bash
@@ -48,7 +48,7 @@ This project is a Django-based REST API for creating and managing quizzes. It us
 ### Frontend Setup (React Example)
 1. **Navigate to frontend folder**
    ```bash
-   cd frontend
+   cd frontend/online-quiz
    ```
 2. **Install dependencies**
    ```bash
@@ -62,7 +62,7 @@ This project is a Django-based REST API for creating and managing quizzes. It us
 ## API Endpoints
 
 ### Authentication
-- **Login:** `/api/token/` (POST)
+- **Login:** `/api/users/login` (POST)
 - **Refresh Token:** `/api/token/refresh/` (POST)
 
 ### Quiz Management
@@ -86,43 +86,17 @@ Use **Postman** or **cURL**:
 ### Example Request (Create Quiz)
 #### Fetch Token
 ```bash
-curl -X POST http://localhost:8000/api/token/ \
+curl -X POST http://localhost:8000/api/users/login/ \
      -H "Content-Type: application/json" \
      -d '{"username": "admin", "password": "password"}'
 ```
-#### Create Quiz (Using Token)
-```bash
-curl -X POST http://localhost:8000/api/quizzes/create/ \
-     -H "Content-Type: application/json" \
-     -H "Authorization: Bearer your_token_here" \
-     -d '{
-       "title": "Sample Quiz",
-       "questions": [1, 2, 3],
-       "score": 10,
-       "duration": 30
-     }'
-```
 
-## Common Issues & Debugging
-1. **JWT Token Not Working?**
-   - Ensure the token is included in the `Authorization` header as `Bearer <token>`
-   - Check if the token is expired
-   - Decode the token:
-     ```python
-     from rest_framework_simplejwt.tokens import AccessToken
-     token_str = "your_jwt_token_here"
-     token = AccessToken(token_str)
-     print(token["user_id"])  # Should print the user ID
-     ```
-2. **pgAdmin4 Not Starting?**
-   - Ensure PostgreSQL service is running
-   - Restart pgAdmin4
-   - Check for logs in `C:\Users\kajal\AppData\Local\Temp`
 
 ## Next Steps
 - Improve frontend UI for quiz management
 - Add user roles and permissions
 - Implement quiz scoring logic
+- implement some backend functionality
 
 ---
 _Developed by Kajal Kashyap_
