@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 
 
@@ -6,10 +6,25 @@ const AdminDashboard = () => {
   const [isAdmin, setIsAdmin] = useState(true); // Toggle between Admin and Participant
   const navigate = useNavigate();
 
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+
+    if (storedToken) {
+      setToken(storedToken);
+      setLoading(false);
+    } else {
+      alert("You are not logged in!");
+      navigate("/"); // Redirect to login if token is missing
+    }
+  }, [navigate]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     // localStorage.removeItem("isAdmin");
-    navigate("/api/users/login") // Redirect to login page
+    navigate("/") // Redirect to login page
   };
 
   const quizzes = [

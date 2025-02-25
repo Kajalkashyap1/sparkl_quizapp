@@ -5,7 +5,8 @@ function CreateQuiz() {
   const navigate = useNavigate();
 
   // Retrieve token from localStorage on component mount
-  const [token, setToken] = useState(localStorage.getItem("access_token") || "");
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // State for quiz data
   const [quizData, setQuizData] = useState({
@@ -16,21 +17,24 @@ function CreateQuiz() {
   });
 
   useEffect(() => {
-    // Ensure token persists across pages
-    const storedToken = localStorage.getItem("access_token");
+    const storedToken = localStorage.getItem("token");
+
     if (storedToken) {
       setToken(storedToken);
+      setLoading(false);
     } else {
       alert("You are not logged in!");
-      navigate("/login"); // Redirect to login if token is missing
+      navigate("/"); // Redirect to login if token is missing
     }
   }, [navigate]);
+
 
   const handleChange = (e) => {
     setQuizData({ ...quizData, [e.target.name]: e.target.value });
   };
 
   const handleNext = async () => {
+    console.log("Stored Token Before API Call:", token);
     console.log("Quiz Data:", quizData);
 
     if (!token) {
@@ -39,11 +43,12 @@ function CreateQuiz() {
     }
 
     try {
+
       const response = await fetch("http://localhost:8000/api/quizzes/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(quizData),
       });
@@ -63,9 +68,9 @@ function CreateQuiz() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token"); // Clear token from storage
+    localStorage.removeItem("token"); // Clear token from storage
     setToken(""); // Clear token state
-    navigate("/login"); // Redirect to login
+    navigate("/"); // Redirect to login
   };
 
   return (
@@ -85,7 +90,7 @@ function CreateQuiz() {
 
       {/* Navbar */}
       <div className="mt-4 bg-white w-full max-w-lg p-4 rounded-md shadow-md flex space-x-4">
-        <button className="px-4 py-2 bg-gray-300 rounded-md">Dashboard</button>
+        <button className="px-4 py-2 bg-gray-300 rounded-md" onClick={()=> navigate("/admin_dashboard")}>Dashboard</button>
         <button className="px-4 py-2 bg-blue-600 text-white rounded-md">Create Quiz</button>
       </div>
 

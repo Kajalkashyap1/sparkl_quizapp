@@ -17,6 +17,11 @@ def get_quizzes(request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def create_quiz(request):
+    print("Authenticated User:", request.user) 
+
+    if not request.user or not request.user.is_authenticated:
+        return Response({"error": "User authentication failed"}, status=401)
+    
     data = request.data
     quiz = Quiz.objects.create(
         title=data["title"],

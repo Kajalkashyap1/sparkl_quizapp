@@ -8,7 +8,7 @@ function Auth() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [email, setEmail] = useState(""); // Email for signup only
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -17,7 +17,7 @@ function Auth() {
       localStorage.setItem("token", res.data.access_token);
       localStorage.setItem("role", res.data.user.role);
 
-      console.log("Stored Token:", localStorage.getItem("token"));
+      console.log("Stored Token:", localStorage.getItem("token")); //debug
       console.log("Stored Role:", localStorage.getItem("role"));
       
       console.log(res.data);
