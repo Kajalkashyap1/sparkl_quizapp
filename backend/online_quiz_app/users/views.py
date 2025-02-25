@@ -3,7 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
 import json
 from .models import User  # Import your custom User model
-from django.contrib.auth import authenticate, login
+# from django.contrib.auth import authenticate, login
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @csrf_exempt  
 def signup(request):
@@ -47,17 +48,25 @@ def user_login(request):
             email = data.get("email")
             password = data.get("password")
 
-            # ✅ Check if the email exists in the database
+            # ✅ Check if user exists
             try:
-                user = User.objects.get(email=email)  # Fetch user manually
+                user = User.objects.get(email=email)
             except User.DoesNotExist:
                 return JsonResponse({"error": "Email not registered"}, status=400)
 
-            # ✅ Check password manually
-            if check_password(password, user.password):  # Compare hashed password
-                # login(request, user)  # Log in user
+            # ✅ Check password
+            if check_password(password, user.password):
+                # ✅ Generate JWT Token using Simple JWT
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+
                 return JsonResponse(
-                    {"message": "Login successful!", "user": {"email": user.email, "role": user.role}},
+                    {
+                        "message": "Login successful!",
+                        "access_token": access_token,  # Short-lived token
+                        "refresh_token": str(refresh),  # Long-lived token
+                        "user": {"email": user.email, "role": user.role},
+                    },
                     status=200
                 )
             else:

@@ -1,8 +1,10 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Quiz, Question, QuestionOption, QuizAttempt
 from django_ratelimit.decorators import ratelimit
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -11,16 +13,16 @@ def get_quizzes(request):
     quizzes = Quiz.objects.all().values("id", "title", "total_score", "duration")
     return Response(list(quizzes))
 
-@api_view(['POST'])
+@api_view(["POST"])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
-@ratelimit(key='user', rate='100/s', method='POST', block=True)
 def create_quiz(request):
-    if not request.user.is_admin:
-        return Response({"error": "Unauthorized"}, status=403)
-    
+    data = request.data
     quiz = Quiz.objects.create(
-        title=request.data["title"],
-        total_score=request.data["total_score"],
-        duration=request.data["duration"]
+        title=data["title"],
+        questions=data["questions"],
+        score=data["score"],
+        duration=data["duration"],
+        created_by=request.user
     )
-    return Response({"message": "Quiz created", "quiz_id": quiz.id})
+    return Response({"message": "Quiz Created", "quiz_id": quiz.id}, status=201)
